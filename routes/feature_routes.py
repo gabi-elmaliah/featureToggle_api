@@ -152,6 +152,96 @@ def get_all_features_for_package(package_name):
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "An error occurred"}), 500
+
+
+#  Get all active feature toggles for package name and date
+@feature_toggle_blueprint.route('/feature-toggles/<package_name>/by-date', methods=['GET'])
+def get_feature_toggles_by_date(package_name):
+    """
+    Get all active feature toggles by a specific date
+    --- 
+    parameters:
+        - name: package_name
+          in: path
+          type: string
+          required: true
+          description: Name of the package
+        - name: date
+          in: query
+          type: string
+          required: true
+          description: Date in the format YYYY-MM-DD
+    responses:
+        200:
+            description: List of active feature toggles by date
+        404:
+            description: The specified package does not exist
+        500:
+            description: An error occurred while retrieving feature toggles
+    """
+    date_str = request.args.get('date', "")
+    db = MongoConnectionHolder.get_db()
+    if db is None:
+        # Helpful error message for debugging
+        return jsonify({'error': 'Database not initialized'}), 500
+    
+    if package_name not in db.list_collection_names():
+        return jsonify({"error": f"Package '{package_name}' does not exist"}), 404
+    
+
+    try:
+        # Parse specific date
+        specific_date = datetime.strptime(date_str, '%Y-%m-%d')
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid date format, use YYYY-MM-DD'}), 400
+
+    features_by_date = []
+    package_collection = db[package_name]
+
+    # Find feature toggles by date
+    active_features_by_date = list(package_collection.find({
+        'expiration_date': {'$gte': specific_date},
+        'beginning_date': {'$lte': specific_date}
+    }))
+    for feature in active_features_by_date:
+        features_by_date.append(feature)
+    return jsonify(features_by_date), 200
+
+
+#  Delete all feature toggles for package name
+@feature_toggle_blueprint.route('/feature-toggles/<package_name>', methods=['DELETE'])
+def delete_all_feature_toggles(package_name):
+    """
+    Delete all feature toggles
+    --- 
+    parameters:
+        - name: package_name
+          in: path
+          type: string
+          required: true
+          description: Name of the package
+    responses:
+        200:
+            description: All feature toggles deleted
+        404:
+            description: Package not found
+    """
+    db = MongoConnectionHolder.get_db()
+    if db is None:
+        return jsonify({"error": "Could not connect to the database"}), 500
+    
+    if package_name not in db.list_collection_names():
+        return jsonify({"error": f"Package '{package_name}' does not exist"}), 404
+    
+    package_collection = db[package_name]
+    
+    # Delete all feature toggles
+    package_collection.delete_many({})
+    return jsonify({'message': 'All feature toggles deleted'}), 200
+
+
+
+
     
 
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>/active', methods=['GET'])
@@ -651,6 +741,8 @@ def get_feature_statistics(package_name):
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
     
     
 
