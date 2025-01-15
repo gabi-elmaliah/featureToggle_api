@@ -91,7 +91,7 @@ def create_feature_toggle():
 
     return jsonify({"message": "Feature toggle created successfully", '_id': feature_toggle_item['_id']}), 201
 
-
+# get All features in the specified package
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>', methods=['GET'])
 def get_all_features_for_package(package_name):
     """
@@ -155,6 +155,7 @@ def get_all_features_for_package(package_name):
 
 
 #  Get all active feature toggles for package name and date
+##########
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>/by-date', methods=['GET'])
 def get_feature_toggles_by_date(package_name):
     """
@@ -209,6 +210,7 @@ def get_feature_toggles_by_date(package_name):
 
 
 #  Delete all feature toggles for package name
+#######
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>', methods=['DELETE'])
 def delete_all_feature_toggles(package_name):
     """
@@ -243,7 +245,7 @@ def delete_all_feature_toggles(package_name):
 
 
     
-
+# Get active features in the package
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>/active', methods=['GET'])
 def get_active_features(package_name):
 
@@ -308,6 +310,8 @@ def get_active_features(package_name):
     except Exception as e:
         return jsonify({"error": "An error occurred while retrieving active feature toggles"}), 500
     
+
+####    
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>/<feature_id>', methods=['DELETE'])
 def delete_feature_toggle(package_name, feature_id):
 
@@ -460,6 +464,7 @@ def update_feature_toggle(package_name, feature_id):
         return jsonify({'message': 'Dates updated'}), 200
 
     return jsonify({'error': 'Feature toggle not found'}), 404
+
 
 @feature_toggle_blueprint.route('/feature-toggles/<package_name>/recent', methods=['GET'])
 def get_recent_features(package_name):
