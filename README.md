@@ -2,8 +2,8 @@
 
 This API provides functionality for managing feature toggles in a MongoDB-backed system. It allows developers to activate or deactivate features for specific packages dynamically, enabling flexible and efficient feature rollout strategies.
 
-
 ## Features
+
 - **Feature Management**: Create, retrieve, update, and delete feature toggles.
 - **Active Feature Query**: Fetch active features by date or date range.
 - **Statistics**: Get usage statistics for a package.
@@ -15,11 +15,13 @@ This API provides functionality for managing feature toggles in a MongoDB-backed
 ## Endpoints
 
 ### 1. Create a New Feature Toggle
-**POST /feature-toggle**
+
+## POST /feature-toggle
 
 **Description**: Creates a new feature toggle.
 
 **Request Body**:
+
 ```json
 {
   "package_name": "string",
@@ -172,9 +174,7 @@ Deletes all feature toggles for the specified package.
 
 ---
 
-#### Example Request:
-```bash
-DELETE http://127.0.0.1:5000/feature-toggles/example_package
+
 
 
 ---
