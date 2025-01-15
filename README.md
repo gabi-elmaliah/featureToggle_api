@@ -411,3 +411,25 @@ This API provides functionality for managing feature toggles in a MongoDB-backed
 
 - **404:** Package not found.
 - **500:** Database connection error.
+
+---
+
+## Notes
+- All dates must be in the format `YYYY-MM-DD HH:MM:SS`.
+- MongoDB is used as the database backend. Ensure the `MongoConnectionHolder` is correctly configured.
+- Error handling is implemented for invalid input, database connection failures, and other edge cases.
+
+## Setup Instructions
+1. Install dependencies:
+   ```bash
+   pip install -r ./requirements.txt
+   ```
+2. Ensure MongoDB is running and accessible.
+3. Start the Flask application.
+    ```bash
+    python app.py
+    ```
+---
+
+## License
+This API is provided under the MIT License. Feel free to modify and use it as needed.
