@@ -1,5 +1,5 @@
 from flask import Flask
-from flasgger import Swagger
+from flasgger import Swagger 
 from database.connection import MongoConnectionHolder
 from routes.feature_routes import feature_toggle_blueprint
 import os 
