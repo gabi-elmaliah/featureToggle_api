@@ -31,6 +31,7 @@ class MongoConnectionHolder:
         if MongoConnectionHolder.__db is None:
             try:
                 print("Initializing MongoDB connection...")
+                print(MONGO_URI)
                 # Create a new client and connect to the server
                 client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
 
@@ -40,6 +41,7 @@ class MongoConnectionHolder:
                 
                 MongoConnectionHolder.__db = client[DB_NAME]
             except Exception as e:
+                print(MONGO_URI)
                 print(e)
         return MongoConnectionHolder.__db
 
